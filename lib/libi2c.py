@@ -9,6 +9,7 @@ class I2C:
 		self._bus=smbus.SMBus(1);
 	def writeU8(self, reg, v):
 		try:
+			print reg;
 			self._bus.write_byte_data(self._addr, reg, v);
 		except IOError, err:
 			print "Error : write data";
