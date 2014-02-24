@@ -10,7 +10,7 @@ import libport
 COEF=10**(-3);
 class Servo:
 	Timp=0;
-	Tc=1.5*COEF;
+	Tc=1.25*COEF;
 	T=20*COEF;
 	def __init__(self, port):
 		self._port=port;
@@ -19,9 +19,9 @@ class Servo:
 		global COEF;
 		while (self._status):
 			Teff=abs(self.Tc+self.Timp);
-			self._port.write(True);
+			self._port.write(1);
 			time.sleep(Teff);
-			self._port.write(False);
+			self._port.write(0);
 			time.sleep(self.T-Teff);
 		print "Fin";
 	def start(self):
