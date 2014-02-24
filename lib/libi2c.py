@@ -11,22 +11,24 @@ class I2C:
 		try:
 			self._bus.write_byte_data(self._addr, reg, v);
 		except IOError, err:
-			return "Error : write data";
+			print "Error : write data";
 	def readU8(self, reg):
 		try:
-			return self.read_byte_data(self._addr, reg);
+			return self._bus.read_byte_data(self._addr, reg);
 		except IOError, err:
-			return "Error : read data";
+			print "Error : read data";
+			return 0x0;
 	def writeBlock(self, reg, b):
 		try:
 			self._bus.write_block_data(self._addr, reg, b);
 		except IOError, err:
-			return "Error : write block";
+			print "Error : write block";
 	def readBlock(self, reg, length):
 		try:
 			return self._bus.read_block_data(self._addr, reg, length);
 		except IOError, err:
-			return "Error : read data";
+			print "Error : read data";
+			return 0x0;
 		
 		
 

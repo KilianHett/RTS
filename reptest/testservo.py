@@ -12,7 +12,7 @@ def controle():
 	k='0';
 	getch=Getch._Getch();
 	#p22=libport.Port(22, libport.Port.OUT);
-	pext=libport.ExtPort(10, 0x0);
+	pext=libport.ExtPort(7, 0x20, libport.ExtPort.IN);
 	servo=libservo.Servo(pext);
 	servo.start();
 	while (not k=='c'):
