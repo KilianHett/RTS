@@ -46,29 +46,41 @@ class ExtPort(Port):
 		self._i2c=libi2c.I2C(addr);
 		#self._i2c.writeU8(IODIRA, 0xFF);
 		#self._i2c.writeU8(IODIRB, 0xFF);
-		self._direction=self._i2c.readU8(IODIRA);
-		self._direction|=self._i2c.readU8(IODIRB);
+		self._portmap=self._i2c.readU8(IODIRA);
+		self._portmap|=self._i2c.readU8(IODIRB);
 		if (num<8):
 			iodirav=self._i2c.readU8(IODIRA);
 			iodirav=self._changeBit(iodirav, num, mode);
 			self._i2c.writeU8(IODIRA, iodirav);
-			self._direction=iodirav;
+			self._portmap=iodirav;
 		else:
 			iodirbv=self._i2c.readU8(IODIRB);
 			iodirbv=self._changeBit(iodirbv, num-8, mode);
 			self._i2c.writeU8(IODIRB, iodirbv);
-			self._direction=iodirbv;
+			self._portmap=iodirbv;
 	def _changeBit(self, bits, pos, v):
 		if (v==0):
 			bits&=~(v<<pos);
 		else:
 			bits|=(v<<pos);
-
 	def read(self):
-		return 0;
+		assert not (self._portmap&(1<<self._nump)==0),"Error: bad mode";
+		if (self._nump<8):
+			val=self._i2c.readU8(GPIOA);
+			return (val>>nump)&(0x1);
+		else:
+			val=self._i2c.readU8(GPIOB);
+			return (val>>(nump-8))&(0x1);
 	def write(self, v):
+		assert self._portmap&(1<<self._nump)==0,"Error: bad mode";
 		if (v==True or v==False):
-			# TODO write on component
-			pass;
+			if (self._nump<8):
+				gpioav=self._i2c.readU8(GPIOA);
+				gpioav=self._changeBit(gpioav, nump, v);
+				self._i2c.writeU8(GPIOA, gpioav);
+			else:
+				gpiobv=self._i2c.readU8(GPIOB);
+				gpiobv=self._changeBit(gpiobv, nump-8, v);
+				self._i2c.writeU8(GPIOB, gpiobv);
 		else:
 			print "Error : Bad value"; 

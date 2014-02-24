@@ -18,6 +18,17 @@ class I2C:
 		except IOError, err:
 			print "Error : read data";
 			return 0x0;
+	def writeU16(self, reg, v):
+		try:
+			self._bus.write_word.data(self._addr, reg, v);
+		except IOError, err:
+			print "Error : write data";
+	def readU16(self, reg):
+		try:
+			return self._bus.read_word_data(self._addr, reg);
+		except IOError, err:
+			print "Error : read data";
+			return 0x0;
 	def writeBlock(self, reg, b):
 		try:
 			self._bus.write_block_data(self._addr, reg, b);
