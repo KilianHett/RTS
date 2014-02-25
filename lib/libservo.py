@@ -33,7 +33,7 @@ class Servo:
 		self._status=False;
 		self._daemon.join();
 	def rotate(self, teta):
-		self.Timp=(teta/math.pi)*COEF;
+		self.Timp=(teta/(2*math.pi))*COEF;
 		return self.Timp;
 
 

@@ -59,16 +59,13 @@ class ExtPort(Port):
 			iodirbv=self._changeBit(iodirbv, num%8, mode);
 			self._i2c.writeU8(IODIRB, iodirbv);
 			self._portmap=iodirbv;
-		for i in range(7):
-			print (self._portmap>>i)&0x1;
-		print " \n\n";
 	def _changeBit(self, bits, pos, v):
 		if (v==0):
 			return bits & ~(1<<pos);
 		else:
 			return bits | (1<<pos);
 	def read(self):
-		assert not (self._portmap&(1<<self._nump%8)==0),"bad mode";
+		assert not (self._portmap&(1<<self._nump%8)==0),"Bad mode";
 		if (self._nump<8):
 			val=self._i2c.readU8(GPIOA);
 			return (val>>self._nump)&(0x1);
@@ -76,15 +73,13 @@ class ExtPort(Port):
 			val=self._i2c.readU8(GPIOB);
 			return (val>>(self._nump-8))&(0x1);
 	def write(self, v):
-		assert (self._portmap&(1<<(self._nump%8)))==0,"bad mode";
-		if (v==1 or v==0):
-			if (self._nump<8):
-				gpioav=self._i2c.readU8(OLATA);
-				gpioav=self._changeBit(gpioav, self._nump, v);
-				self._i2c.writeU16(GPIOA, gpioav);
-			else:
-				gpiobv=self._i2c.readU8(OLATB);
-				gpiobv=self._changeBit(gpiobv, self._nump%8, v);
-				self._i2c.writeU16(GPIOB, gpiobv);
+		assert (self._portmap&(1<<(self._nump%8)))==0,"Bad mode";
+		assert (v==1 or v==0), "Bad value";
+		if (self._nump<8):
+			gpioav=self._i2c.readU16(OLATA);
+			gpioav=self._changeBit(gpioav, self._nump, v);
+			self._i2c.writeU16(GPIOA, gpioav);
 		else:
-			print "Error : Bad value"; 
+			gpiobv=self._i2c.readU16(OLATB);
+			gpiobv=self._changeBit(gpiobv, self._nump%8, v);
+			self._i2c.writeU16(GPIOB, gpiobv);
