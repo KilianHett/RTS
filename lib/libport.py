@@ -47,23 +47,22 @@ class ExtPort(Port):
 		assert num<16 and num>=0, "Bad pin number"; 
 		self._nump=num;
 		self._i2c=libi2c.I2C(addr);
-		if (num<8):
-			self._portmap=self._i2c.readU8(IODIRA);
-			iodirav=self._i2c.readU8(IODIRA);
-			iodirav=self._changeBit(iodirav, num, mode);
-			self._i2c.writeU8(IODIRA, iodirav);
-			self._portmap=iodirav;
-		else:
-			self._portmap=self._i2c.readU8(IODIRB);
-			iodirbv=self._i2c.readU8(IODIRB);
-			iodirbv=self._changeBit(iodirbv, num%8, mode);
-			self._i2c.writeU8(IODIRB, iodirbv);
-			self._portmap=iodirbv;
+		config(mode);
 	def _changeBit(self, bits, pos, v):
 		if (v==0):
 			return bits & ~(1<<pos);
 		else:
 			return bits | (1<<pos);
+	def config(self, mode):
+		if (self._nump<8):
+			iodir=IODIRA;
+			pos=self._nump;
+		else:
+			iodir=IODIRB;
+			pos=self._nump%8;
+		self._portmap=self._i2c.readU8(iodir);
+		self._portmap=self._changeBit(self._portmap, pos, mode);
+		self._i2c.writeU8(iodir, self._portmap);
 	def read(self):
 		assert not (self._portmap&(1<<self._nump%8)==0),"Bad mode";
 		if (self._nump<8):
