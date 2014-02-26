@@ -63,6 +63,17 @@ class ExtPort(Port):
 		self._portmap=self._i2c.readU8(iodir);
 		self._portmap=self._changeBit(self._portmap, pos, mode);
 		self._i2c.writeU8(iodir, self._portmap);
+	def pullup(self, branch):
+		assert not (self._portmap&(1<<self._nump%8)==0),"Bad mode";
+		if (self._nump<8):
+			gppu=GPPUA;
+			pos=self._nump;
+		else:
+			gppu=GPPUB;
+			pos=self._nump%8;
+		gppuv=self._i2c.readU8(gppu);
+		gppuv=self._changeBit(gppuv, pos, branch);
+		self._i2c.writeU8(gppu, gppuv);
 	def read(self):
 		assert not (self._portmap&(1<<self._nump%8)==0),"Bad mode";
 		if (self._nump<8):
