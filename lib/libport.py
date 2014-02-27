@@ -47,7 +47,7 @@ class ExtPort(Port):
 		assert num<16 and num>=0, "Bad pin number"; 
 		self._nump=num;
 		self._i2c=libi2c.I2C(addr);
-		config(mode);
+		self.config(mode);
 	def _changeBit(self, bits, pos, v):
 		if (v==0):
 			return bits & ~(1<<pos);

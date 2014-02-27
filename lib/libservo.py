@@ -11,7 +11,7 @@ COEF=10**(-3);
 class Servo:
 	Timp=0;
 	Tc=1.25*COEF;
-	T=20*COEF;
+	T=10*COEF;
 	def __init__(self, port):
 		self._port=port;
 		self._status=False;
