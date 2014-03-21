@@ -17,6 +17,8 @@ class I2C:
 			return self._bus.read_byte_data(self._addr, reg);
 		except IOError, err:
 			print "Error : read data";
+			print err;
+			print IOError;
 			return 0x0;
 	def writeU16(self, reg, v):
 		try:

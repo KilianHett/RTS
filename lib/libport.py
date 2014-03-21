@@ -86,10 +86,10 @@ class ExtPort(Port):
 		assert (self._portmap&(1<<(self._nump%8)))==0,"Bad mode";
 		assert (v==1 or v==0), "Bad value";
 		if (self._nump<8):
-			gpioav=self._i2c.readU16(OLATA);
+			gpioav=self._i2c.readU8(OLATA);
 			gpioav=self._changeBit(gpioav, self._nump, v);
-			self._i2c.writeU16(GPIOA, gpioav);
+			self._i2c.writeU8(GPIOA, gpioav);
 		else:
-			gpiobv=self._i2c.readU16(OLATB);
+			gpiobv=self._i2c.readU8(OLATB);
 			gpiobv=self._changeBit(gpiobv, self._nump%8, v);
-			self._i2c.writeU16(GPIOB, gpiobv);
+			self._i2c.writeU8(GPIOB, gpiobv);

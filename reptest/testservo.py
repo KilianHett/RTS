@@ -19,13 +19,13 @@ def controle():
 	servo.start();
 	while (not k=='c'):
 		k=getch();
-		if (k=='q'):
-			i=i-0.5;
-		elif (k=='d'):
-			i=i+0.5;
+		if (k=='d'):
+			i=i-1;
+		elif (k=='q'):
+			i=i+1;
 		elif (k=='s'):
 			i=0;
-		print ("{0} rad".format(i));
+		print ("{0}° ".format(i));
 		print servo.Tc+servo.rotate(i);
 	servo.stop();
 controle();

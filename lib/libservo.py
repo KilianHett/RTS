@@ -15,10 +15,15 @@ class Servo:
 	def __init__(self, port):
 		self._port=port;
 		self._status=False;
+		self.bornes(-120, 120);
+	def bornes(self, bmin, bmax):
+		self._min=bmin;
+		self._max=bmax;
 	def __routine__(self):
 		global COEF;
 		while (self._status):
-			Teff=abs(self.Tc+self.Timp);
+			if (self.Tc+self.Timp>0):
+				Teff=self.Tc+self.Timp;
 			self._port.write(1);
 			time.sleep(Teff);
 			self._port.write(0);
@@ -33,7 +38,8 @@ class Servo:
 		self._status=False;
 		self._daemon.join();
 	def rotate(self, teta):
-		self.Timp=(teta/(2*math.pi))*COEF;
+		assert teta>=self._min and teta<=self._max, "Bad angle";
+		self.Timp=(teta/180)*COEF;
 		return self.Timp;
 
 
