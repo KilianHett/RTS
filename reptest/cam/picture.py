@@ -2,7 +2,9 @@
 
 import time
 import picamera
-import Image
+from PIL import Image
+import numpy
+
 
 camera=picamera.PiCamera();
 try:
