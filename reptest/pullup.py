@@ -9,8 +9,8 @@ import libport
 
 def pull():
 	getch=Getch._Getch();
-	pin=libport.Port(22, libport.Port.IN);
-	pout=libport.Port(24, libport.Port.OUT);
+	pin=libport.Port(3, libport.Port.IN);
+	pout=libport.Port(5, libport.Port.OUT);
 	k='0';
 	while (not k=='q'):
 		k=getch();
