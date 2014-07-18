@@ -6,13 +6,17 @@ from PIL import Image
 from PIL import ImageOps
 import numpy
 import os
+import matplotlib.pyplot as plt
+
 
 # Convertion Image -> numpy
 def cvtMatrice(img):
 	data=img.getdata();
-	m=numpy.matrix(data);
+	m=numpy.array(data);
+	m=m.astype(numpy.float);
+	m/=255.;
 	w,h=img.size;
-	return numpy.reshape(m, (w, h));
+	return m.reshape(h, w);
 
 # Convertion numpy -> Image
 def cvtImage(matrice):
@@ -44,7 +48,6 @@ def takeImage(camera, def_w, def_h, t_wait, preview=False):
 		stream.seek(0);
 	finally:
 		camera.close();
-	print def_h+buf_h;
 	m=numpy.fromfile(stream, dtype=numpy.uint8).\
 			reshape(h, w, 3);#\
 			#[:def_h,:def_w,:];
@@ -71,10 +74,21 @@ image.save(fp="test.jpg");
 #	camera.capture("test.jpg");
 #finally:
 #	camera.close();
+#	coef_w=def_w/32;
+#	coef_h=def_h/16;
 
 
 # Chargement et convertion de l'image en matrice ( numpy )
-#h=Image.open("base.jpg");
+him=Image.open("element.png");
+him=ImageOps.grayscale(him);
+h=cvtMatrice(him);
+empty=numpy.zeros((im.shape[0], im.shape[1]));
+empty=empty.astype(numpy.float);
+empty[:h.shape[0],:h.shape[1]]=h[:,:];
+emptyIm=cvtImage(empty*255);
+emptyIm.save(fp="empty.png");
+h=empty;
+
 #img=Image.open("test.jpg");
 #img=ImageOps.grayscale(img);
 #im=cvtMatrice(img);
@@ -82,12 +96,19 @@ image.save(fp="test.jpg");
 # Transformer de fourrier 2D (fft)
 fft=numpy.fft;
 fim=fft.fft2(im);
+fh=fft.fft2(h);
 
-#fxcorr=numpy.dot(fim,fh);
-#xcorr=fft.ifft2(fxcorr);
-#ximg=cvtImage(xcorr);
-#ximg.save(fp="xcorr.png");
+print fim.shape[0], fim.shape[1];
+print fh.shape[0], fh.shape[1];
 
+fxcorr=fim*fh;
+xcorr=fft.ifft2(fxcorr);
+print xcorr;
+absx=numpy.absolute(xcorr);
+ma=max(absx.flat);
+ximg=cvtImage(255*(absx/ma));
+ximg.save(fp="xcorr.png");
+#plt.imshow(xcorr);
 fim=fft.fftshift(fim);
 fim=numpy.absolute(fim);
 img=cvtImage(fim);
