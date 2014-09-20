@@ -8,6 +8,10 @@ import numpy
 import os
 import matplotlib.pyplot as plt
 
+def argmax2(m):
+	i=numpy.argmax(m);
+	l,m=m.shape;
+	return (i%m),(i/m);
 
 # Convertion Image -> numpy
 def cvtMatrice(img):
@@ -79,7 +83,7 @@ image.save(fp="test.jpg");
 
 
 # Chargement et convertion de l'image en matrice ( numpy )
-him=Image.open("element.png");
+him=Image.open("base.png");#("element.png");
 him=ImageOps.grayscale(him);
 h=cvtMatrice(him);
 empty=numpy.zeros((im.shape[0], im.shape[1]));
@@ -108,13 +112,19 @@ absx=numpy.absolute(xcorr);
 ma=max(absx.flat);
 ximg=cvtImage(255*(absx/ma));
 ximg.save(fp="xcorr.png");
+
 #plt.imshow(xcorr);
+
 fim=fft.fftshift(fim);
 fim=numpy.absolute(fim);
 img=cvtImage(fim);
 img.save(fp="fft_test.png");
 
 
+# Affichage du point ou l'intercorrelation 
+# est la plus forte
+x,y=argmax2(absx);
+print x,y;
 
 #with picamera.PiCamera() as camera:
 #	camera.start_preview();
