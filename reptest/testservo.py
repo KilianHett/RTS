@@ -12,10 +12,10 @@ def controle():
 	i=0;
 	k='0';
 	getch=Getch._Getch();
-	#p22=libport.Port(22, libport.Port.OUT);
-	pext=libport.ExtPort(7, 0x20, libport.ExtPort.OUT);
-	#servo=libservo.Servo(p22);
-	servo=libservo.Servo(pext);
+	p22=libport.Port(7, libport.Port.OUT);
+	#pext=libport.ExtPort(7, 0x20, libport.ExtPort.OUT);
+	servo=libservo.Servo(p22);
+	#servo=libservo.Servo(pext);
 	servo.start();
 	while (not k=='c'):
 		k=getch();
@@ -26,7 +26,10 @@ def controle():
 		elif (k=='s'):
 			i=0;
 		print ("{0}° ".format(i));
-		print servo.Tc+servo.rotate(i);
+		try:
+			print servo._Tc+servo.rotate(i);
+		except Exception:
+			print "Error";
 	servo.stop();
 controle();
 

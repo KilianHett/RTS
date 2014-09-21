@@ -38,11 +38,9 @@ if __name__=="__main__":
 	svm.start();
 	time.sleep(1);
 	timp = svm.rotate(-90);
-	print (timp*10**3);
-	time.sleep(2);
-	timp = svm.rotate(90);
-	print (timp*10**3);	
-	time.sleep(2);
+	time.sleep(1);
+	timp = svm.rotate(90);	
+	time.sleep(1);
 	#svm.rotate(90);
 	## Récupération du pattern	
 	him=imread("pattern.jpg");
