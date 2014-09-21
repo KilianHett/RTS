@@ -7,8 +7,8 @@ import math
 import libport
 
 class Servo:
-	_Unit=10**(-4);
-	_Timp=0;
+	_Unit=(10.)**(-4.);
+	_Timp=0.;
 	_Tmin=10.*_Unit;
 	_Tc=15.*_Unit;
 	_Tmax=20.*_Unit;
@@ -44,7 +44,7 @@ class Servo:
 		self._daemon.join();
 	def rotate(self, teta):
 		assert teta>=self._min and teta<=self._max, "Bad angle";
-		self._Timp=(self._Tmax-self._Tmin)*(teta/90.);
+		self._Timp=(self._Tmax-self._Tmin)*(teta/180.);
 		return self._Timp;
 
 
