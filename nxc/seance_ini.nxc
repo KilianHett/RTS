@@ -1,0 +1,128 @@
+/*
+   Code séance d'initiation du Club Robot
+   Parcours d'obstacles
+
+	Conseil :
+	1) Suivi de ligne
+	2) Odom 1D
+
+	Faire des tests en lançant
+ 
+	NOTICE : Demarrer le robot sur du blanc pour la calibration des capteurs de
+		luminosité pour le suivi de ligne.
+*/
+
+#define MAXPOWER -70
+#define MINPOWER -30
+#define TEMPMIN 150
+#define True 0==0
+#define Flase !True
+
+#define SENSORRIGHT S3
+#define SENSORLEFT S4
+
+
+float captR_ref=0;
+float captL_ref=0;
+float captR_value=0;
+float captL_value=0;
+
+int powerRight=0;
+int powerLeft=0;
+
+int pnt_dir = 0;
+
+void go()
+{
+	OnFwd(OUT_B,powerRight);
+	OnFwd(OUT_A,powerLeft);
+}
+
+/*
+	Compléter ici la task pour le suivi de ligne
+*/
+task sensorRight()
+{
+	int accumulator=0;
+	captR_ref= SensorValue(SENSORRIGHT)-10;
+	while(True)
+	{
+		captR_value = SensorValue(SENSORRIGHT);
+		if (captR_ref > captR_value)
+		{
+			pnt_dir = /** 0 **/;
+			powerRight = MAXPOWER;
+			powerLeft = /** 50 **/;
+		}
+		else
+		{
+			pnt_dir = /** 1 **/;
+			//PlayTone(1040,100);
+			powerRight = MINPOWER;
+			Wait(TEMPMIN);
+			//powerLeft = MAXPOWER;
+		}
+
+	}
+}
+
+/* 
+	Redressement à gauche
+*/
+task sensorLeft()
+{
+	int accumulatori=0;
+
+	captL_ref= SensorValue(SENSORLEFT)-10;
+	while(True)
+	{
+		captL_value= SensorValue(SENSORLEFT);
+
+		if (captL_ref-10>captL_value)
+		{
+			//pnt_dir = 0;
+			powerLeft = MAXPOWER;
+			//powerRight = 50;
+		}
+		else
+		{
+			//pnt_dir = -1;
+			//PlayTone(1040,100);
+			powerLeft = MINPOWER;
+			Wait(TEMPMIN);
+			//powerRight = MAXPOWER;
+		}
+	}
+}
+
+
+/*
+	Compléter ici la task pour l'odométrie 1D
+*/
+task odometrie1D()
+{
+	// TODO Utiliser la fonction utiliser pour la coupe et mettre des troues
+}
+
+
+void suivreLigne(int mm)
+{
+	// TODO Utiliser l'odom, avancer de X
+}
+
+/*
+	Fonction principale "main"
+*/
+task main()
+{
+	SetSensorLight(SENSORRIGHT);
+	SetSensorLight(SENSORLEFT);
+
+	start sensorRight;
+	start sensorLeft;
+
+	while(1==1)
+	{
+		go();
+	}
+}
