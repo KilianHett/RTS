@@ -2,6 +2,10 @@
 # -*- coding: UTF-8 -*-
 
 
+import sys
+
+sys.path.append("../lib");
+
 import time
 import threading
 import Getch
@@ -35,10 +39,10 @@ def controleKey():
 			i=i+0.1;
 		elif (k=='s'):
 			i=0;
-		print(((Tc+i)*(10**(-3)), " ms");
+		print((Tc+i)*(10**(-3)), " ms");
 
 def controleServo():
-	ctrl=22;
+	ctrl=7;
 	GPIO.setmode(GPIO.BOARD);
 	GPIO.setup(ctrl,GPIO.OUT);
 

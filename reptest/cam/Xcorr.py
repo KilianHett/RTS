@@ -18,7 +18,7 @@ def capture(cam):
 
 
 if __name__=="__main__":
-	him=imread("rubix.jpg");
+	him=imread("hand.jpg");
 	him=cvtColor(him, COLOR_RGB2GRAY);
 	cam=video.create_capture(0);
 	namedWindow("patch");
